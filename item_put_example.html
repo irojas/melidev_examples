@@ -31,6 +31,7 @@
 		<script>
 						
 			var itemIds = []
+			var noItems = false			
 
 			function getUserItems(userId){
 				
@@ -39,7 +40,8 @@
 				MELI.get("/users/"+userId+"/items/search",{"status":"active", "order":"stop_time_asc", "limit":10}, function(response) {
 					var results = response[2].results;				
 					if(results.length == 0){
-						$tbody.append("<tr><td><legend>No items to show...</legend></td></tr>");					
+						$tbody.append("<tr><td><legend>No items to show...</legend></td></tr>");
+						noItems = true;
 					}						
 					for (var i = 0; i < results.length; i++) {
 						var itemId = results[i];
@@ -96,17 +98,23 @@
 			});
 
 			$('#lista tr').live('mouseover',function() {
-    				$(this).addClass('highlightedRow');
+				if(!noItems){								   				  
+					$(this).addClass('highlightedRow');
+				}
 			});
 			
 			$('#lista tr').live('mouseout',function() {
-   				$(this).removeClass('highlightedRow');
+				if(!noItems){								   				
+					$(this).removeClass('highlightedRow');
+				}
 			});
 
 			$("#lista tr").live('click',function(){
-				$(this).modal("<form id='put-form' data-id='"+$(this).data("id")+"' class='ch-form'><legend>Update your item subtitle!</legend><p class='ch-form-row'><label for='text'>New subtitle:</label><input id='subtitle' name='subtitle' type='text'></p><p class='ch-form-actions'><input id='update-btn' data-id='"+$(this).data("id")+"' class='ch-btn ch-secondary' type='button' value='Update!'></p></form>").show();
+				if(!noItems){								
+					$(this).modal("<form id='put-form' data-id='"+$(this).data("id")+"' class='ch-form'><legend>Update your item subtitle!</legend><p class='ch-form-row'><label for='text'>New subtitle:</label><input id='subtitle' name='subtitle' type='text'></p><p class='ch-form-actions'><input id='update-btn' data-id='"+$(this).data("id")+"' class='ch-btn ch-secondary' type='button' value='Update!'></p></form>").show();
+				}			
 			});
-
+			
 			$("#update-btn").live('click',function(){		
 				var subtitle = $("#subtitle").val();
 				
