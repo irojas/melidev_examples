@@ -38,7 +38,7 @@
 
 				MELI.get("/users/"+userId+"/items/search",{"status":"active"}, function(response) {
 					var results = response[2].results;				
-					if(results.lenght == 0){
+					if(results.length == 0){
 						$tbody.append("<tr><td><legend>No items to show...</legend></td></tr>");					
 					}						
 					for (var i = 0; i < results.length; i++) {
