@@ -36,7 +36,7 @@
 				
 				$tbody = $(".datagrid tbody");
 
-				MELI.get("/users/"+userId+"/items/search",{"status":"active", "order"="stop_time_asc", "limit"=10}, function(response) {
+				MELI.get("/users/"+userId+"/items/search",{"status":"active", "order":"stop_time_asc", "limit":10}, function(response) {
 					var results = response[2].results;				
 					if(results.length == 0){
 						$tbody.append("<tr><td><legend>No items to show...</legend></td></tr>");					
