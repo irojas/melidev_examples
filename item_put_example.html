@@ -38,6 +38,9 @@
 
 				MELI.get("/users/"+userId+"/items/search",{"status":"active"}, function(response) {
 					var results = response[2].results;				
+					if(results.lenght == 0){
+						$tbody.append("<tr><td><legend>No items to show...</legend></td></tr>");					
+					}						
 					for (var i = 0; i < results.length; i++) {
 						var itemId = results[i];
 						MELI.get("/items/"+itemId,{attributes: 'id,status,thumbnail,title,subtitle,seller_custom_field,initial_quantity,available_quantity'}, function(response){	
