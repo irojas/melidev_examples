@@ -1,6 +1,6 @@
 <html>
 	<head>
-		<title>Ejemplo de put de item</title>
+		<title>Update an item</title>
 		<link rel="stylesheet" href="http://www.chico-ui.com.ar/versions/0.10/chico-min-0.10.css"></link>
 		<style type="text/css">
 			.highlightedRow { background-color: #88dddd; }
@@ -9,6 +9,17 @@
 				font-size:14px;
 				font-weight:normal;
 			}
+			td.image{
+				width: 20px;
+			}
+			td.title{
+				width: 30px;
+			}
+			td.subtitle{
+				width: 30px;
+			}
+
+
 		</style>
 	</head>
 	<body>
@@ -49,15 +60,15 @@
 						  if(response[2].available_quantity == response[2].initial_quantity){
 							$tbody.append(
 							"<tr id='row' data-id='"+response[2].id+"'>"+
-							"<td>"+
+							"<td class='image'>"+
 							"<img id='"+response[2].id+"' src='" + response[2].thumbnail + "' alt='" + response[2].title + "' width='90' height='90'>"+
 							"</td>"+
-							"<td>"+
+							"<td class='title'>"+
 							"<p class='ch-form-row'><legend>"+
 							response[2].title+
 							"</legend></p>"+
 							"</td>"+
-							"<td>"+
+							"<td class='subtitle'>"+
 							"<p class='ch-form-row'><h4 class='desc'>"+
 							     response[2].subtitle+
 							"</h4></p>"+
