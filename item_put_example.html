@@ -24,7 +24,9 @@
 		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js"> </script>		
 		<script src="http://www.chico-ui.com.ar/versions/0.10/chico-min-0.10.js" charset="utf-8" ></script>
 		<script src="http://tioborracho.github.com/mercadolibre.js/mercadolibre.js" charset="utf-8" ></script>	
-		
+		<input type="button" class="ch-btn ch-primary" id="start" value="Get my items"/>
+
+
 		<table class="datagrid items">
 			<tbody id="lista">
 				
@@ -36,6 +38,7 @@
 						
 			var itemIds = []
 			var noItems = false			
+			var subtitleModal
 
 			function getUserItems(userId){
 				
@@ -49,26 +52,35 @@
 					}						
 					for (var i = 0; i < results.length; i++) {
 						var itemId = results[i];
-						MELI.get("/items/"+itemId,{attributes: 'id,status,thumbnail,title,subtitle,seller_custom_field,initial_quantity,available_quantity'}, function(response){	
+						MELI.get("/items/"+itemId,{attributes: 'id,site_id,status,thumbnail,title,subtitle,seller_custom_field,initial_quantity,available_quantity'}, function(response){	
 						  if(response[2].available_quantity == response[2].initial_quantity){
+							
+							var subtitle
+						    var imageSrc
+
+							if(response[2].subtitle == null)
+							    	subtitle = "" 
+							    else 	
+							     	subtitle = response[2].subtitle
+							
+							if(response[2].thumbnail == "")
+								imageSrc = "http://img2.mlstatic.com/s_"+response[2].site_id+"_v_O_f_artsinfoto.jpg"
+							else
+								imageSrc = response[2].thumbnail
+
 							$tbody.append(
 							"<tr id='row' data-id='"+response[2].id+"'>"+
 							"<td class='image'>"+
-							"<img id='"+response[2].id+"' src='" + response[2].thumbnail + "' alt='" + response[2].title + "' width='90' height='90'>"+
+							"<img id='"+response[2].id+"' src='" + imageSrc + "' alt='" + response[2].title + "' width='90' height='90'>"+
 							"</td>"+
 							"<td class='title'>"+
 							"<p class='ch-form-row'><legend>"+
 							response[2].title+
 							"</legend></p><br/>"+
 							"<p class='ch-form-row'><h4 class='desc'>"+
-							     response[2].subtitle+
+								subtitle+							    
 							"</h4></p>"+
 							"</td>"+
-							//"<td class='subtitle'>"+
-							//"<p class='ch-form-row'><h4 class='desc'>"+
-							 //    response[2].subtitle+
-							//"</h4></p>"+
-							//"</td>"+
 							"</tr>"
 							);
 						   }
@@ -93,16 +105,21 @@
 								
 								
 				MELI.init({client_id: 4290});
-
-				MELI.getLoginStatus(function(status) {									
-
-					if(!status || !(status.state == "AUTHORIZED" || status.state == "IDENTIFIED"))
-						MELI.login(getUserData);					
-					else 
-						getUserData();						
-				});
+				$('#start').disabled=false
 					
 			});
+
+			$('#start').live('click',function(){
+					this.disabled=true
+					MELI.getLoginStatus(function(status) {									
+
+						if(!status || !(status.state == "AUTHORIZED" || status.state == "IDENTIFIED"))
+							MELI.login(getUserData);					
+						else 
+							getUserData();						
+					})
+			});
+				
 
 			$('#lista tr').live('mouseover',function() {
 				if(!noItems){								   				  
@@ -118,7 +135,8 @@
 
 			$("#lista tr").live('click',function(){
 				if(!noItems){								
-					$(this).modal("<form id='put-form' data-id='"+$(this).data("id")+"' class='ch-form'><legend>Update your item subtitle!</legend><p class='ch-form-row'><label for='text'>New subtitle:</label><input id='subtitle' name='subtitle' type='text'></p><p class='ch-form-actions'><input id='update-btn' data-id='"+$(this).data("id")+"' class='ch-btn ch-secondary' type='button' value='Update!'></p></form>").show();
+					subtitleModal = $(this).modal("<form id='put-form' data-id='"+$(this).data("id")+"' class='ch-form'><legend>Update your item subtitle!</legend><p class='ch-form-row'><label for='text'>New subtitle:</label><input id='subtitle' name='subtitle' type='text'></p><p class='ch-form-actions'><input id='update-btn' data-id='"+$(this).data("id")+"' class='ch-btn ch-secondary' type='button' value='Update!'></p></form>");
+					subtitleModal.show()
 				}			
 			});
 			
@@ -131,7 +149,10 @@
 				
 				MELI.put("/items/"+itemId,dataput, function(data){
 					if(data[0] == 200){										
-						location.reload();
+						$tbody = $(".datagrid tbody");
+						$tbody.empty()
+						subtitleModal.hide();
+						getUserData();
 					} else {
 						return false;					
 					}
