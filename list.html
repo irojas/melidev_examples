@@ -1,0 +1,44 @@
+<html>
+	<head>
+		<title>List an Item JavaScript SDK Example</title>
+	</head>
+	<body>
+		<script src="http://tioborracho.github.com/mercadolibre.js/mercadolibre.js" charset="utf-8" ></script>
+		
+		<button onclick="doExample();">Run JDK Example</button>
+		
+		<script>
+	
+		//Return user data
+		function getUserData(){
+			MELI.get("/users/me",{},function(data){
+				if(data[0] == 200){
+					alert("User Data: "+data);
+				} else {
+					alert("User doesn't exist");
+				}
+			});
+		}
+
+		//Init the example
+		function doExample(){
+			
+			//Init the MeLi SDK with test client_id
+			MELI.init({client_id: 5736});
+				
+			//Check the login status
+			MELI.getLoginStatus(function(status) {				
+				if(!status || !(status.state == "AUTHORIZED" || status.state == "IDENTIFIED")){
+					//Login user and get data
+					MELI.login(getUserData);
+				} else {
+					//Get the user data
+					getUserData();
+				}
+			});
+		}
+		</script>
+		
+	</body>
+</html>
+
