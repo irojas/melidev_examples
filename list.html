@@ -19,7 +19,7 @@
 			</tr>
 			<tr>
 				<td>Result</td>
-				<td><input type="text" id="result" value="" disabled="disabled" size="50"></td>
+				<td><input type="text" id="result" value="" disabled="disabled" size="70"></td>
 			</tr>			
 		</table> 	
 		<button onclick="doExample();">List Item in MeLi</button>
@@ -40,7 +40,7 @@
 			},
 			function(data){
 				if(data[0] == 201){
-					result.value = "Item was listed successfully, ID: "+data[2].id;
+					result.value = "Item was listed successfully, ID: "+data[2].id+", Link: "+data[2].permalink;
 				} else {
 					result.value = "Error listing item: "+data[2].error;
 				}
