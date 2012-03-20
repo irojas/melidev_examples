@@ -39,7 +39,7 @@
 				condition:"new"
 			},
 			function(data){
-				if(data[0] == 200){
+				if(data[0] == 201){
 					result.value = "Item was listed successfully, ID: "+data[2].id;
 				} else {
 					result.value = "Error listing item: "+data[2].error;
