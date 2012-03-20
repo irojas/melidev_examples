@@ -2,26 +2,55 @@
 	<head>
 		<title>List an Item JavaScript SDK Example</title>
 	</head>
-	<body>
-		<script src="http://tioborracho.github.com/mercadolibre.js/mercadolibre.js" charset="utf-8" ></script>
-		
-		<button onclick="doExample();">Run JDK Example</button>
+	<body>	
+		<script src="http://tioborracho.github.com/mercadolibre.js/mercadolibre.js" charset="utf-8" ></script>	
+		<table>
+			<tr>
+				<td>Title</td>
+				<td><input type="text" id="title" value="Test Item - Do Not Bid"></td>
+			</tr>
+			<tr>
+				<td>Price</td>
+				<td><input type="text" id="price" value="10"></td>
+			</tr>
+			<tr>
+				<td>Quantity</td>
+				<td><input type="text" id="quantity" value="1"></td>
+			</tr>
+			<tr>
+				<td>Result</td>
+				<td><input type="text" id="result" value="" disabled="disabled" size="50"></td>
+			</tr>			
+		</table> 	
+		<button onclick="doExample();">List Item in MeLi</button>
 		
 		<script>
 	
-		//Return user data
-		function getUserData(){
-			MELI.get("/users/me",{},function(data){
+		//List an Item in MeLi
+		function listItem(){
+			MELI.post("/items/",
+			{
+				title: title.value,
+				category_id: "MLA3530",
+				price: price.value,
+				currency_id: "ARS",
+				available_quantity: quantity.value,
+				listing_type_id: "bronze",
+				condition:"new"
+			},
+			function(data){
 				if(data[0] == 200){
-					alert("User Data: "+data[2].last_name+", "+data[2].first_name+" ("+data[2].nickname+")");
+					result.value = "Item was listed successfully, ID: "+data[2].id;
 				} else {
-					alert("User doesn't exist");
+					result.value = "Error listing item: "+data[2].error;
 				}
 			});
 		}
 
 		//Init the example
 		function doExample(){
+			
+			result.value = "Processing Request ...";
 			
 			//Init the MeLi SDK with test client_id
 			MELI.init({client_id: 5736});
@@ -30,10 +59,10 @@
 			MELI.getLoginStatus(function(status) {				
 				if(!status || !(status.state == "AUTHORIZED" || status.state == "IDENTIFIED")){
 					//Login user and get data
-					MELI.login(getUserData);
+					MELI.login(listItem);
 				} else {
 					//Get the user data
-					getUserData();
+					listItem();
 				}
 			});
 		}
@@ -41,4 +70,3 @@
 		
 	</body>
 </html>
-
