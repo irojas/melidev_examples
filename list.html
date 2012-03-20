@@ -13,7 +13,7 @@
 		function getUserData(){
 			MELI.get("/users/me",{},function(data){
 				if(data[0] == 200){
-					alert("User Data: "+data);
+					alert("User Data: "+data[2].last_name+", "+data[2].first_name+" ("+data[2].nickname+")");
 				} else {
 					alert("User doesn't exist");
 				}
