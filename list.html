@@ -19,7 +19,7 @@
 			</tr>
 			<tr>
 				<td>Result</td>
-				<td><input type="text" id="result" value="" disabled="disabled" size="45"></td>
+				<td><input type="text" id="result" value="" size="45"></td>
 			</tr>			
 		</table> 	
 		<button onclick="doExample();">List Item in MELI</button>
@@ -41,6 +41,7 @@
 			function(data){
 				if(data[0] == 201){
 					result.value = "Item successfully listed, ID: "+data[2].id;
+					alert("Item ID: "+data[2].id)
 				} else {
 					result.value = "Error listing item: "+data[2].error;
 				}
