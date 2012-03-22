@@ -1,9 +1,11 @@
 <html>
 	<head>
 		<title>List Helper with JavaScript SDK Example</title>
+		<style type="text/css">
+			#logo { height: 150px; width: 200px; overflow: hidden; }
+		</style>
 	</head>
 	<body>
-		
 		
 		<script src="http://tioborracho.github.com/mercadolibre.js/mercadolibre.js" charset="utf-8" ></script>
 		
@@ -28,7 +30,9 @@
 			</tr>			 
 			<tr>
 				<td>Preview</td>
-				<td><img id="preview" src="http://static.mlstatic.com/org-img/chico/img/logo-mercadolibre.png"></td>
+				<td>
+				<div id="logo"><img id="preview" src="http://static.mlstatic.com/org-img/chico/img/logo-mercadolibre.png"></div>
+				</td>
 			</tr>			 
 			<tr>
 				<td>Result</td>
@@ -65,7 +69,7 @@
 				function(data){
 					if(data[0] == 201){
 						result.value = "Item successfully listed, ID: "+data[2].id;
-						window.open(data[2].permalink,'mywindow','width=640,height=480');					
+						window.open(data[2].permalink,'mywindow','width=400,height=200');					
 					} else {
 						result.value = "Error listing item: "+data[2].error;
 					}
