@@ -1,0 +1,97 @@
+<html>
+	<head>
+		<title>List Helper with JavaScript SDK Example</title>
+	</head>
+	<body>
+		
+		
+		<script src="http://tioborracho.github.com/mercadolibre.js/mercadolibre.js" charset="utf-8" ></script>
+		
+		<table>
+			<tr>
+				<td>Title</td>
+				<td><input type="text" id="title" value="Test Item - Do Not Bid"></td>
+			</tr>
+			<tr>
+				<td>Price</td>
+				<td><input type="text" id="price" value="10"></td>
+			</tr>
+			<tr>
+				<td>Description</td>
+				<td>
+					<textarea rows="5" cols="25" id="textDesciption">This is a Test Item, to test the Item API Helper, please do not bid!</textarea>
+				</td>
+			</tr>
+			<tr>
+				<td>Picture</td>
+				<td><input type="text" id="picture" value="http://static.mlstatic.com/org-img/chico/img/logo-mercadolibre.png" onchange="reloadImg();" size="45"></td>
+			</tr>			 
+			<tr>
+				<td>Preview</td>
+				<td><img id="preview" src="http://static.mlstatic.com/org-img/chico/img/logo-mercadolibre.png"></td>
+			</tr>			 
+			<tr>
+				<td>Result</td>
+				<td><input type="text" id="result" value="" size="45"></td>
+			</tr>			
+		</table> 	
+		<button onclick="doExample();">List Item in MeLi</button>
+		
+		<script type="text/javascript">
+
+		function reloadImg(){
+			var pic  = document.getElementById("picture");
+			var prev = document.getElementById("preview");
+			prev.src = pic.value;
+		}
+		
+		//List an Item in MeLi
+		function listItem(){
+			MELI.post("/items/",
+				{
+					title: title.value,
+					title: title.value,
+					category_id: "MLA3530",
+					price: price.value,
+					currency_id: "ARS",
+					available_quantity: 1,
+					listing_type_id: "bronze",
+					condition:"new",
+					description:textDesciption.value,
+					pictures:[
+						{source:picture.value}
+					]
+				},
+				function(data){
+					if(data[0] == 201){
+						result.value = "Item successfully listed, ID: "+data[2].id;
+						window.open(data[2].permalink,'mywindow','width=400,height=200');					
+					} else {
+						result.value = "Error listing item: "+data[2].error;
+					}
+				});
+		}
+
+		//Init the example
+		function doExample(){
+			
+			result.value = "Processing Request ...";
+			
+			//Init the MeLi SDK with test client_id
+			MELI.init({client_id: 5736});
+				
+			//Check the login status
+			MELI.getLoginStatus(function(status) {				
+				if(!status || !(status.state == "AUTHORIZED" || status.state == "IDENTIFIED")){
+					//Login user and get data
+					MELI.login(listItem);
+				} else {
+					//Get the user data
+					listItem();
+				}
+			});
+		}
+		</script>
+		
+	</body>
+</html>
