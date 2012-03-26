@@ -70,10 +70,8 @@
 					//Login user and get data
 					MELI.login();
 				}
-				
-				$('#access_token') = MELI.getToken();					
-				
 			});
+			$('#access_token').value = MELI.getToken();					
 
 		}		
 
