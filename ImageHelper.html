@@ -58,7 +58,6 @@
 		}
 
 		function initMeli(arr, $form, options) { 
-			alert("Llamando al init meli");
 			result.value = "Processing Request ..."; 
 
     			//Init the MeLi SDK with test client_id
@@ -76,7 +75,6 @@
 		}		
 
 		$(document).ready(function() { 
-			alert("configurando el form");
 			var options = { 
 				beforeSubmit:  initMeli,  // pre-submit callback 
 				success:       updateItem,  // post-submit callback
