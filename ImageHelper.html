@@ -1,0 +1,89 @@
+<html>
+	<head>
+		<title>Picture Helper with JavaScript SDK Example</title>
+		<style type="text/css">
+			#logo { height: 150px; width: 200px; overflow: hidden; }
+		</style>		
+	</head>
+	<body>
+		
+		<script src="http://tioborracho.github.com/mercadolibre.js/mercadolibre.js" charset="utf-8" ></script>
+		<form id="pictureForm" action="https://api.mercadolibre.com/pictures" method="post" enctype="multipart/form-data" /> 
+		<input type="hidden" id="access_token"/>
+		<table>
+			<tr>
+				<td>Item id</td>
+				<td><input type="text" id="itemId" value=""></td>
+			</tr>
+			<tr>
+				<td>Picture</td>
+				<td><input type="file" id="file"></td>
+			</tr>
+			<tr>
+				<td>Result</td>
+				<td><input type="text" id="result" value="" size="45"></td>
+			</tr>			
+		</table> 	
+		<input type="submit" value="Add picture"/>
+		</form>
+
+		<script src="http://chico-ui.com.ar/src/js/jquery.js"></script>
+		<script src="http://malsup.github.com/jquery.form.js"></script>
+		<script type="text/javascript">
+
+		function reloadImg(){
+			var pic  = document.getElementById("picture");
+			var prev = document.getElementById("preview");
+			prev.src = pic.value;
+		}
+		
+		//List an Item in MeLi
+		function updateItem(responseText, statusText, xhr, $form){
+			alert("llegue al update item: "+ responseText);
+			var pictureId = JSON.parse(responseText).id;
+			alert("La imagen es: " + pictureId);
+
+			MELI.post("/items/"+$("#itemId")+"/pictures/",
+				{
+					id: pictureId
+				},
+				function(data){
+					if(data[0] == 200){
+						result.value = "Item successfully modified, new picture id: "+pictureId;
+						window.open(data[2].permalink,'mywindow','width=640,height=480');					
+					} else {
+						result.value = "Error updating item: "+data[2].error;
+					}
+				});
+		}
+
+		function initMeli(arr, $form, options) { 
+			result.value = "Processing Request ..."; 
+
+    			//Init the MeLi SDK with test client_id
+			MELI.init({client_id: 5736});
+				
+			//Check the login status
+			MELI.getLoginStatus(function(status) {				
+				if(!status || !(status.state == "AUTHORIZED" || status.state == "IDENTIFIED")){
+					//Login user and get data
+					MELI.login(listItem);
+				} else {
+					$('#access_token') = status.access_token;					
+				}
+			});
+
+		}		
+
+		$(document).ready(function() { 
+			var options = { 
+				beforeSubmit:  initMeli,  // pre-submit callback 
+				success:       updateItem  // post-submit callback 
+			}; 
+
+			// bind form using 'ajaxForm' 
+			$('#pictureForm').ajaxForm(options); 
+		}); 
+		</script>
+	</body>
+</html>
