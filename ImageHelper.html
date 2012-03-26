@@ -67,7 +67,7 @@
 			MELI.getLoginStatus(function(status) {				
 				if(!status || !(status.state == "AUTHORIZED" || status.state == "IDENTIFIED")){
 					//Login user and get data
-					MELI.login(listItem);
+					MELI.login(initMeli);
 				} else {
 					$('#access_token') = status.access_token;					
 				}
