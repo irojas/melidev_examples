@@ -58,6 +58,7 @@
 		}
 
 		function initMeli(arr, $form, options) { 
+			alert("Llamando al init meli");
 			result.value = "Processing Request ..."; 
 
     			//Init the MeLi SDK with test client_id
@@ -67,15 +68,17 @@
 			MELI.getLoginStatus(function(status) {				
 				if(!status || !(status.state == "AUTHORIZED" || status.state == "IDENTIFIED")){
 					//Login user and get data
-					MELI.login(initMeli);
-				} else {
-					$('#access_token') = status.access_token;					
+					MELI.login();
 				}
+				
+				$('#access_token') = MELI.getToken();					
+				
 			});
 
 		}		
 
 		$(document).ready(function() { 
+			alert("configurando el form");
 			var options = { 
 				beforeSubmit:  initMeli,  // pre-submit callback 
 				success:       updateItem  // post-submit callback 
