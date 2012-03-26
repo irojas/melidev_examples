@@ -38,9 +38,9 @@
 		}
 		
 		//List an Item in MeLi
-		function updateItem(responseText, statusText, xhr, $form){
+		function updateItem(responseJSON, statusText, xhr, $form){
 			alert("llegue al update item: "+ responseText);
-			var pictureId = JSON.parse(responseText).id;
+			var pictureId = responseJSON.id;
 			alert("La imagen es: " + pictureId);
 
 			MELI.post("/items/"+$("#itemId")+"/pictures/",
@@ -81,7 +81,9 @@
 			alert("configurando el form");
 			var options = { 
 				beforeSubmit:  initMeli,  // pre-submit callback 
-				success:       updateItem  // post-submit callback 
+				success:       updateItem,  // post-submit callback
+				dataType: "json",
+				iframe: true
 			}; 
 
 			// bind form using 'ajaxForm' 
