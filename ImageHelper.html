@@ -39,7 +39,7 @@
 				},
 				function(data){
 					if(data[0] == 200){
-						$("#result").html("Item successfully modified, new picture id: "+pictureId". In a few moments it will be available at: <a href='"+data[2].permalink+"'>"+data[2].permalink+"</a>");
+						$("#result").html("Item successfully modified, new picture id: "+pictureId+". In a few moments it will be available at: <a href='"+data[2].permalink+"'>"+data[2].permalink+"</a>");
 					} else {
 						$("#result").text("Error updating item: "+data[2].error);
 					}
